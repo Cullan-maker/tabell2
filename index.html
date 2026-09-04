@@ -115,7 +115,7 @@
             letter-spacing: 0.5px; display: block; margin-bottom: 8px;
         }
 
-        select, input[type="number"] {
+        select, input[type="text"] {
             width: 100%; height: 50px; border-radius: var(--radius-md); border: 1px solid var(--border-color);
             background: var(--bg-secondary); color: var(--text-primary); font-size: 16px; padding: 0 16px;
             outline: none; transition: border 0.2s; appearance: none;
@@ -210,7 +210,7 @@
     <header>
         <div class="header-title">
             <span>Straffvärde</span>
-            <span style="font-size: 12px; color: var(--text-secondary); font-weight: 500; background: var(--bg-secondary); padding: 4px 10px; border-radius: 12px;">v3.1 (Stabil)</span>
+            <span style="font-size: 12px; color: var(--text-secondary); font-weight: 500; background: var(--bg-secondary); padding: 4px 10px; border-radius: 12px;">v3.2 (Pro)</span>
         </div>
         <div class="header-subtitle">Juridisk kalkylator för narkotikabrott</div>
     </header>
@@ -227,7 +227,8 @@
                 <div class="input-group">
                     <label>Kvantitet</label>
                     <div class="flex-row">
-                        <input type="number" id="drug-amount" placeholder="0" min="0" step="any" oninput="updateCalc()">
+                        <!-- Input ändrad till text med decimal-mode för att lösa Apples kommatecken-bugg -->
+                        <input type="text" inputmode="decimal" id="drug-amount" placeholder="0" oninput="updateCalc()">
                         <div class="unit-indicator" id="drug-unit">g</div>
                     </div>
                 </div>
@@ -251,7 +252,7 @@
             <div class="card">
                 <div class="card-header">Sammanvägt straffvärde</div>
                 <p class="info-text" style="font-size: 13px; margin-bottom: 20px;">
-                    Vid innehav av flera preparat tillämpas omräkningsprincipen (RättsPM 2025:4). Baspreparatet (det med högst straffvärde) utgör grunden som övriga räknas om till.
+                    Vid innehav av flera preparat tillämpas omräkningsprincipen enligt <b>RättsPM 2025:4</b>. Baspreparatet (det med högst straffvärde) utgör grunden som övriga räknas om till.
                 </p>
 
                 <div id="cart-items-container">
@@ -278,13 +279,11 @@
                     <select id="table-drug-select" onchange="renderTables()"></select>
                 </div>
                 
-                <!-- Ny strukturerad Tabell-väljare -->
                 <div class="segmented">
                     <button id="seg-prison" class="seg-btn active" onclick="switchTable('prison')">Fängelseskala</button>
                     <button id="seg-fines" class="seg-btn" onclick="switchTable('fines')">Bötespraxis</button>
                 </div>
 
-                <!-- Detaljerad Fängelseskala -->
                 <div id="table-prison">
                     <div class="table-wrap">
                         <table>
@@ -294,7 +293,6 @@
                     </div>
                 </div>
 
-                <!-- Detaljerad Bötespraxis -->
                 <div id="table-fines" style="display: none;">
                     <div class="table-wrap">
                         <table>
@@ -311,12 +309,12 @@
             <div class="card">
                 <div class="card-header">Juridiska Riktlinjer</div>
                 <p class="info-text"><b>Flerfaldig brottslighet (RättsPM 2025:4)</b><br>
-                Vid innehav av ett parti narkotika med flera olika preparat utgör det som regel en brottsenhet. Mängden av viss narkotika översätts till den typ av preparat vars mängd innefattar det högst straffvärdet. Straffvärdet bestäms därefter på den sammanlagda ekvivalenta mängden av detta baspreparat.</p>
+                Mängden av viss narkotika översätts till den typ av preparat vars mängd innefattar det högsta straffvärdet. Straffvärdet bestäms därefter på den sammanlagda ekvivalenta mängden av detta baspreparat.</p>
                 
                 <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
                 
                 <p class="info-text"><b>Ringa brott & Böter (RättsPM 2021:21)</b><br>
-                När mängden bedöms som "Ringa narkotikabrott, innehav för eget bruk" fastställs straffet utifrån en strikt tabell. Påföljden blir då mellan 30 och 150 dagsböter enligt uppdaterade riktlinjerna från 2026.</p>
+                När mängden understiger fängelsenivå fastställs straffet enligt åklagarmyndighetens tabell till dagsböter (30–150 st). Tabellvärdena för bötespraxis är uppdaterade enligt direktiv från juni 2026.</p>
             </div>
         </div>
     </main>
@@ -343,9 +341,7 @@
 </div>
 
 <script>
-    /* 
-     * Databas: Fängelseskala (Normalgrad till Synnerligen Grovt)
-     */
+    /* DATABAS: FÄNGELSESKALA */
     const DRUG_DB = {
         "Amfetamin": { unit: "g", note: "Gäller även syntetiska katinoner (mefedron, MDPV) m.fl.", steps: [{ m: 0.5, qty: 5 }, { m: 1, qty: 10 }, { m: 2, qty: 15 }, { m: 3, qty: 25 }, { m: 4, qty: 40 }, { m: 5, qty: 60 }, { m: 6, qty: 80 }, { m: 7, qty: 100 }, { m: 8, qty: 120 }, { m: 9, qty: 140 }, { m: 10, qty: 160 }, { m: 11, qty: 180 }, { m: 12, qty: 200 }, { m: 24, qty: 500 }, { m: 36, qty: 1000 }, { m: 48, qty: 2000 }, { m: 60, qty: 5000 }, { m: 72, qty: 25000 }, { m: 84, qty: 100000 }, { m: 96, qty: 500000 }] },
         "Cannabis": { unit: "g", note: "Avser rent gram. Från 2 kg inträder grovt brott.", steps: [{ m: 0.5, qty: 50 }, { m: 1, qty: 100 }, { m: 2, qty: 150 }, { m: 3, qty: 250 }, { m: 4, qty: 400 }, { m: 5, qty: 600 }, { m: 6, qty: 800 }, { m: 7, qty: 1000 }, { m: 8, qty: 1200 }, { m: 9, qty: 1400 }, { m: 10, qty: 1600 }, { m: 11, qty: 1800 }, { m: 12, qty: 2000 }, { m: 24, qty: 5000 }, { m: 36, qty: 10000 }, { m: 48, qty: 20000 }, { m: 60, qty: 50000 }, { m: 72, qty: 250000 }, { m: 84, qty: 1000000 }, { m: 96, qty: 5000000 }] },
@@ -353,4 +349,4 @@
         "Heroin": { unit: "g", note: "Synnerligen farligt preparat.", steps: [{ m: 0.5, qty: 0.05 }, { m: 1, qty: 0.1 }, { m: 2, qty: 0.5 }, { m: 3, qty: 1 }, { m: 4, qty: 4 }, { m: 5, qty: 6 }, { m: 6, qty: 8 }, { m: 7, qty: 10 }, { m: 8, qty: 12 }, { m: 9, qty: 14 }, { m: 10, qty: 16 }, { m: 11, qty: 18 }, { m: 12, qty: 20 }, { m: 24, qty: 50 }, { m: 36, qty: 100 }, { m: 48, qty: 200 }, { m: 60, qty: 500 }, { m: 72, qty: 2500 }, { m: 84, qty: 10000 }, { m: 96, qty: 50000 }] },
         "Ecstasy": { unit: "st", note: "Ecstasy och LSD. Beredd tablett/tripp.", steps: [{ m: 0.5, qty: 50 }, { m: 1, qty: 100 }, { m: 2, qty: 150 }, { m: 3, qty: 250 }, { m: 4, qty: 400 }, { m: 5, qty: 600 }, { m: 6, qty: 800 }, { m: 7, qty: 1000 }, { m: 8, qty: 1200 }, { m: 9, qty: 1400 }, { m: 10, qty: 1600 }, { m: 11, qty: 1800 }, { m: 12, qty: 2000 }, { m: 24, qty: 5000 }, { m: 36, qty: 10000 }, { m: 48, qty: 20000 }, { m: 60, qty: 50000 }, { m: 72, qty: 250000 }, { m: 84, qty: 1000000 }, { m: 96, qty: 5000000 }] },
         "GHB": { unit: "cl", note: "100 cl = 1 liter.", steps: [{ m: 0.5, qty: 50 }, { m: 1, qty: 100 }, { m: 2, qty: 150 }, { m: 3, qty: 250 }, { m: 4, qty: 400 }, { m: 5, qty: 600 }, { m: 6, qty: 800 }, { m: 7, qty: 1000 }, { m: 8, qty: 1200 }, { m: 9, qty: 1400 }, { m: 10, qty: 1600 }, { m: 11, qty: 1800 }, { m: 12, qty: 2000 }, { m: 24, qty: 5000 }, { m: 36, qty: 10000 }, { m: 48, qty: 20000 }, { m: 60, qty: 50000 }, { m: 72, qty: 250000 }, { m: 84, qty: 1000000 }, { m: 96, qty: 5000000 }] },
-        "Tramadol": { unit: "g", note: "Avser mängd ren verksam substans.", steps: [{ m: 0.5, qty: 20 }, { m: 1, qty: 40 }, { m: 2, qty: 60 }, { m: 3, qty: 100 }, { m: 4, qty: 160 }, { m: 5, qty: 240 }, {
+        "Tramadol": { unit: "g", note: "Avser mängd ren verksam substans.", steps: [{ m: 0.5, qty: 20 }, { m: 1, qty: 40 }, { m: 2, qty: 60 }, { m: 3, qty: 100 }, { m: 4, qty: 160 }, { m: 5, qty: 240 }, { m: 6, qty: 320 }, { m: 7, qty: 400 }, { m: 8, qty: 480 }, { m: 9, qty: 560 }, { m: 10, qty: 640 }, { m: 11, qty: 720 }, { m: 12, qty: 800 }, { m: 24, qty: 2000 }, { m: 36, qty: 4000 }, { m:
