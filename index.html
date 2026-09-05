@@ -2,351 +2,377 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Straffvärde">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Straffvärde Narkotika</title>
-
     <style>
         :root {
-            --bg-body: #f2f2f7;
-            --bg-surface: #ffffff;
-            --bg-secondary: #f3f3f8;
-            --text-primary: #000000;
-            --text-secondary: #8e8e93;
-            --border-color: #e5e5ea;
-            --accent: #007aff;
-            --badge-ringa: #34c759;
-            --badge-normal: #007aff;
-            --badge-grovt: #ff9500;
-            --badge-synn: #ff3b30;
-            --radius-lg: 20px;
-            --radius-md: 12px;
-            --shadow: 0 4px 20px rgba(0,0,0,0.05);
+            --bg-color: #f2f2f7;
+            --card-bg: #ffffff;
+            --text-main: #000000;
+            --text-muted: #8e8e93;
+            --border: #e5e5ea;
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-body: #000000;
-                --bg-surface: #1c1c1e;
-                --bg-secondary: #2c2c2e;
-                --text-primary: #ffffff;
-                --text-secondary: #98989d;
-                --border-color: #38383a;
-                --accent: #0a84ff;
-                --shadow: 0 4px 20px rgba(0,0,0,0.3);
+                --bg-color: #000000;
+                --card-bg: #1c1c1e;
+                --text-main: #ffffff;
+                --text-muted: #98989d;
+                --border: #38383a;
             }
         }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif;
-        }
-
         body {
-            background-color: var(--bg-body);
-            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
-            padding: 0;
+            padding: 20px 16px;
             display: flex;
             justify-content: center;
-            min-height: 100vh;
         }
 
-        .app-container {
+        .widget-container {
             width: 100%;
-            max-width: 450px;
+            max-width: 390px;
+            height: 800px;
+            max-height: 90vh;
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-            background: var(--bg-body);
-            position: relative;
         }
 
-        header {
-            padding: calc(env(safe-area-inset-top) + 20px) 20px 15px;
-            background: var(--bg-surface);
-            border-bottom: 1px solid var(--border-color);
+        .header {
+            text-align: center;
+            padding: 24px 16px 12px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin: 4px 0 16px;
+        }
+
+        .selector-container {
+            padding: 0 16px 16px;
+        }
+
+        select {
+            width: 100%;
+            appearance: none;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            border: none;
+            padding: 14px 16px;
+            font-size: 17px;
+            font-weight: 600;
+            border-radius: 12px;
+            outline: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%238e8e93%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px top 50%;
+            background-size: 14px auto;
+        }
+
+        .results {
+            flex-grow: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .section-header {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #fff;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 10;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            background: rgba(var(--bg-surface), 0.85);
         }
 
-        .header-title {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin: 0;
+        .bg-green { background-color: rgba(52, 199, 89, 0.95); }
+        .bg-blue { background-color: rgba(0, 122, 255, 0.95); }
+        .bg-red { background-color: rgba(255, 59, 48, 0.95); }
+        .bg-black { background-color: rgba(28, 28, 30, 0.95); color: #fff; }
+
+        .row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-        }
-
-        .header-subtitle {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-
-        main {
-            flex: 1;
-            padding: 20px 20px calc(env(safe-area-inset-bottom) + 90px);
-            overflow-y: auto;
-        }
-
-        .card {
-            background: var(--bg-surface);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-        }
-
-        .card-header { font-size: 17px; font-weight: 600; margin-bottom: 15px; letter-spacing: -0.3px; }
-
-        .input-group { margin-bottom: 16px; }
-        .input-group label {
-            font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;
-            letter-spacing: 0.5px; display: block; margin-bottom: 8px;
-        }
-
-        select, input[type="text"] {
-            width: 100%; height: 50px; border-radius: var(--radius-md); border: 1px solid var(--border-color);
-            background: var(--bg-secondary); color: var(--text-primary); font-size: 16px; padding: 0 16px;
-            outline: none; transition: border 0.2s; appearance: none;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 16px;
         }
         
-        select {
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;
+        .row:last-child {
+            border-bottom: none;
         }
 
-        select:focus, input:focus { border-color: var(--accent); }
-        .flex-row { display: flex; gap: 12px; }
+        .label { color: var(--text-muted); font-weight: 500; }
+        .value { font-weight: 600; }
 
-        .unit-indicator {
-            display: flex; align-items: center; justify-content: center; padding: 0 16px;
-            background: var(--bg-secondary); border-radius: var(--radius-md); border: 1px solid var(--border-color);
-            font-weight: 600; color: var(--text-secondary); min-width: 70px;
+        .note-box {
+            font-size: 12px;
+            color: var(--text-muted);
+            padding: 20px 16px;
+            text-align: center;
+            background: var(--bg-color);
+            line-height: 1.4;
         }
-
-        .result-panel { background: var(--bg-secondary); border-radius: var(--radius-md); padding: 20px; text-align: center; margin-top: 20px; }
-        .badge {
-            display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 11px;
-            font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: white; margin-bottom: 12px;
-        }
-
-        .bg-ringa { background: var(--badge-ringa); }
-        .bg-normal { background: var(--badge-normal); }
-        .bg-grovt { background: var(--badge-grovt); }
-        .bg-synn { background: var(--badge-synn); }
-
-        .result-value { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
-        .result-description { font-size: 13px; color: var(--text-secondary); line-height: 1.4; }
-
-        .btn {
-            width: 100%; height: 50px; border-radius: var(--radius-md); border: none; background: var(--accent);
-            color: white; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center;
-            gap: 8px; cursor: pointer; transition: opacity 0.2s; margin-top: 16px;
-        }
-
-        .btn:active { opacity: 0.8; }
-        .btn-outline { background: transparent; color: var(--accent); border: 2px solid var(--accent); }
-
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-color); }
-        .cart-item:last-child { border-bottom: none; }
-        
-        .item-details { flex: 1; }
-        .item-title { font-weight: 600; font-size: 16px; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
-        .base-tag { font-size: 10px; background: var(--accent); color: white; padding: 2px 6px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .item-sub { font-size: 13px; color: var(--text-secondary); }
-        
-        .delete-btn {
-            background: var(--bg-secondary); color: var(--badge-synn); border: none; border-radius: 50%;
-            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
-            font-size: 16px; cursor: pointer;
-        }
-
-        .table-wrap { overflow-x: auto; margin: 0 -20px; padding: 0 20px; }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
-        th { background: var(--bg-secondary); padding: 10px 12px; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
-        td { padding: 12px; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
-
-        .tab-bar {
-            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 450px;
-            background: var(--bg-surface); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around;
-            padding: 10px 0 calc(env(safe-area-inset-bottom) + 10px); z-index: 100;
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: rgba(var(--bg-surface), 0.85);
-        }
-
-        .tab-item {
-            background: none; border: none; color: var(--text-secondary); display: flex; flex-direction: column;
-            align-items: center; gap: 4px; font-size: 10px; font-weight: 500; cursor: pointer; width: 25%;
-        }
-        .tab-item svg { width: 24px; height: 24px; stroke-width: 2; stroke: currentColor; fill: none; transition: transform 0.2s; }
-        .tab-item.active { color: var(--accent); }
-        .tab-item.active svg { transform: scale(1.1); }
-
-        .segmented { display: flex; background: var(--bg-secondary); padding: 3px; border-radius: 9px; margin-bottom: 20px; }
-        .seg-btn { flex: 1; padding: 6px; border: none; background: transparent; color: var(--text-primary); font-size: 13px; font-weight: 500; border-radius: 7px; cursor: pointer; }
-        .seg-btn.active { background: var(--bg-surface); box-shadow: var(--shadow); font-weight: 600; }
-
-        .view-content { display: none; animation: fadeIn 0.3s ease; }
-        .view-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        .info-text { font-size: 14px; line-height: 1.5; color: var(--text-secondary); margin-bottom: 16px; }
-        .info-text b { color: var(--text-primary); }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <header>
-        <div class="header-title">
-            <span>Straffvärde</span>
-            <span style="font-size: 12px; color: var(--text-secondary); font-weight: 500; background: var(--bg-secondary); padding: 4px 10px; border-radius: 12px;">v3.2 (Pro)</span>
-        </div>
-        <div class="header-subtitle">Juridisk kalkylator för narkotikabrott</div>
-    </header>
+<div class="widget-container">
+    <div class="header">
+        <h1>Straffvärde Narkotika</h1>
+        <p>Bötespraxis & Fängelseskala</p>
+    </div>
 
-    <main>
-        <!-- VIEW: KALKYLATOR -->
-        <div id="view-calc" class="view-content active">
-            <div class="card">
-                <div class="card-header">Enskilt preparat</div>
-                <div class="input-group">
-                    <label>Typ av narkotika</label>
-                    <select id="drug-select" onchange="updateCalc()"></select>
-                </div>
-                <div class="input-group">
-                    <label>Kvantitet</label>
-                    <div class="flex-row">
-                        <!-- Input ändrad till text med decimal-mode för att lösa Apples kommatecken-bugg -->
-                        <input type="text" inputmode="decimal" id="drug-amount" placeholder="0" oninput="updateCalc()">
-                        <div class="unit-indicator" id="drug-unit">g</div>
-                    </div>
-                </div>
+    <div class="selector-container">
+        <select id="drug-select" onchange="updateWidget()"></select>
+    </div>
 
-                <div class="result-panel">
-                    <div class="badge bg-normal" id="calc-badge">Väntar på indata</div>
-                    <div class="result-value" id="calc-val">–</div>
-                    <div class="result-description" id="calc-desc">Ange mängd för att se beräknat straffvärde.</div>
-                </div>
+    <div class="results" id="results-container">
+        
+        <!-- Ringa brott (Böter) -->
+        <div class="section-header bg-green">Ringa brott (Dagsböter)</div>
+        <div id="fines-data"></div>
 
-                <button class="btn" onclick="addToCart()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-                    Lägg till i beslagslista
-                </button>
-            </div>
-            <p id="calc-note" style="font-size: 12px; color: var(--text-secondary); text-align: center; margin-top: -10px; display: none;"></p>
-        </div>
+        <!-- Normalgrad -->
+        <div class="section-header bg-blue">Normalgrad (Månader)</div>
+        <div id="normal-data"></div>
 
-        <!-- VIEW: BESLAGSKORG -->
-        <div id="view-cart" class="view-content">
-            <div class="card">
-                <div class="card-header">Sammanvägt straffvärde</div>
-                <p class="info-text" style="font-size: 13px; margin-bottom: 20px;">
-                    Vid innehav av flera preparat tillämpas omräkningsprincipen enligt <b>RättsPM 2025:4</b>. Baspreparatet (det med högst straffvärde) utgör grunden som övriga räknas om till.
-                </p>
+        <!-- Grovt -->
+        <div class="section-header bg-red">Grovt brott (År)</div>
+        <div id="grovt-data"></div>
 
-                <div id="cart-items-container">
-                    <div style="text-align: center; padding: 30px 10px; color: var(--text-secondary); font-size: 14px;">
-                        Inga preparat tillagda. Gå till kalkylatorn.
-                    </div>
-                </div>
-
-                <div id="cart-result-container" style="display: none;">
-                    <div class="result-panel">
-                        <div class="badge bg-grovt" id="cart-badge">Samlat utgångsläge</div>
-                        <div class="result-value" id="cart-val">–</div>
-                        <div class="result-description" id="cart-desc"></div>
-                    </div>
-                    <button class="btn btn-outline" onclick="clearCart()" style="margin-top: 15px;">Rensa beslagslista</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- VIEW: TABELLER -->
-        <div id="view-table" class="view-content">
-            <div class="card">
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <select id="table-drug-select" onchange="renderTables()"></select>
-                </div>
-                
-                <div class="segmented">
-                    <button id="seg-prison" class="seg-btn active" onclick="switchTable('prison')">Fängelseskala</button>
-                    <button id="seg-fines" class="seg-btn" onclick="switchTable('fines')">Bötespraxis</button>
-                </div>
-
-                <div id="table-prison">
-                    <div class="table-wrap">
-                        <table>
-                            <thead><tr><th>Straffvärde</th><th>Mängd</th><th>Grad</th></tr></thead>
-                            <tbody id="tbody-prison"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div id="table-fines" style="display: none;">
-                    <div class="table-wrap">
-                        <table>
-                            <thead><tr><th>Dagsböter</th><th>Högst (mängd)</th></tr></thead>
-                            <tbody id="tbody-fines"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- VIEW: INFO -->
-        <div id="view-info" class="view-content">
-            <div class="card">
-                <div class="card-header">Juridiska Riktlinjer</div>
-                <p class="info-text"><b>Flerfaldig brottslighet (RättsPM 2025:4)</b><br>
-                Mängden av viss narkotika översätts till den typ av preparat vars mängd innefattar det högsta straffvärdet. Straffvärdet bestäms därefter på den sammanlagda ekvivalenta mängden av detta baspreparat.</p>
-                
-                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
-                
-                <p class="info-text"><b>Ringa brott & Böter (RättsPM 2021:21)</b><br>
-                När mängden understiger fängelsenivå fastställs straffet enligt åklagarmyndighetens tabell till dagsböter (30–150 st). Tabellvärdena för bötespraxis är uppdaterade enligt direktiv från juni 2026.</p>
-            </div>
-        </div>
-    </main>
-
-    <!-- Navigation -->
-    <nav class="tab-bar">
-        <button class="tab-item active" onclick="switchView('calc', this)">
-            <svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="3"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="14"/><line x1="12" y1="14" x2="12" y2="14"/><line x1="8" y1="14" x2="8" y2="14"/><line x1="16" y1="18" x2="16" y2="18"/><line x1="12" y1="18" x2="12" y2="18"/><line x1="8" y1="18" x2="8" y2="18"/></svg>
-            Kalkylator
-        </button>
-        <button class="tab-item" onclick="switchView('cart', this)">
-            <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-            Beslag
-        </button>
-        <button class="tab-item" onclick="switchView('table', this)">
-            <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            Tabell
-        </button>
-        <button class="tab-item" onclick="switchView('info', this)">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            Info
-        </button>
-    </nav>
+        <!-- Synnerligen grovt -->
+        <div class="section-header bg-black">Synnerligen grovt (År)</div>
+        <div id="synn-data"></div>
+        
+        <div id="widget-note" class="note-box"></div>
+    </div>
 </div>
 
 <script>
-    /* DATABAS: FÄNGELSESKALA */
-    const DRUG_DB = {
-        "Amfetamin": { unit: "g", note: "Gäller även syntetiska katinoner (mefedron, MDPV) m.fl.", steps: [{ m: 0.5, qty: 5 }, { m: 1, qty: 10 }, { m: 2, qty: 15 }, { m: 3, qty: 25 }, { m: 4, qty: 40 }, { m: 5, qty: 60 }, { m: 6, qty: 80 }, { m: 7, qty: 100 }, { m: 8, qty: 120 }, { m: 9, qty: 140 }, { m: 10, qty: 160 }, { m: 11, qty: 180 }, { m: 12, qty: 200 }, { m: 24, qty: 500 }, { m: 36, qty: 1000 }, { m: 48, qty: 2000 }, { m: 60, qty: 5000 }, { m: 72, qty: 25000 }, { m: 84, qty: 100000 }, { m: 96, qty: 500000 }] },
-        "Cannabis": { unit: "g", note: "Avser rent gram. Från 2 kg inträder grovt brott.", steps: [{ m: 0.5, qty: 50 }, { m: 1, qty: 100 }, { m: 2, qty: 150 }, { m: 3, qty: 250 }, { m: 4, qty: 400 }, { m: 5, qty: 600 }, { m: 6, qty: 800 }, { m: 7, qty: 1000 }, { m: 8, qty: 1200 }, { m: 9, qty: 1400 }, { m: 10, qty: 1600 }, { m: 11, qty: 1800 }, { m: 12, qty: 2000 }, { m: 24, qty: 5000 }, { m: 36, qty: 10000 }, { m: 48, qty: 20000 }, { m: 60, qty: 50000 }, { m: 72, qty: 250000 }, { m: 84, qty: 1000000 }, { m: 96, qty: 5000000 }] },
-        "Kokain": { unit: "g", note: "Grovt brott inträder vid 40 gram.", steps: [{ m: 0.5, qty: 0.6 }, { m: 1, qty: 1 }, { m: 2, qty: 3 }, { m: 3, qty: 5 }, { m: 4, qty: 8 }, { m: 5, qty: 12 }, { m: 6, qty: 16 }, { m: 7, qty: 20 }, { m: 8, qty: 24 }, { m: 9, qty: 28 }, { m: 10, qty: 32 }, { m: 11, qty: 36 }, { m: 12, qty: 40 }, { m: 24, qty: 100 }, { m: 36, qty: 200 }, { m: 48, qty: 400 }, { m: 60, qty: 1000 }, { m: 72, qty: 5000 }, { m: 84, qty: 20000 }, { m: 96, qty: 100000 }] },
-        "Heroin": { unit: "g", note: "Synnerligen farligt preparat.", steps: [{ m: 0.5, qty: 0.05 }, { m: 1, qty: 0.1 }, { m: 2, qty: 0.5 }, { m: 3, qty: 1 }, { m: 4, qty: 4 }, { m: 5, qty: 6 }, { m: 6, qty: 8 }, { m: 7, qty: 10 }, { m: 8, qty: 12 }, { m: 9, qty: 14 }, { m: 10, qty: 16 }, { m: 11, qty: 18 }, { m: 12, qty: 20 }, { m: 24, qty: 50 }, { m: 36, qty: 100 }, { m: 48, qty: 200 }, { m: 60, qty: 500 }, { m: 72, qty: 2500 }, { m: 84, qty: 10000 }, { m: 96, qty: 50000 }] },
-        "Ecstasy": { unit: "st", note: "Ecstasy och LSD. Beredd tablett/tripp.", steps: [{ m: 0.5, qty: 50 }, { m: 1, qty: 100 }, { m: 2, qty: 150 }, { m: 3, qty: 250 }, { m: 4, qty: 400 }, { m: 5, qty: 600 }, { m: 6, qty: 800 }, { m: 7, qty: 1000 }, { m: 8, qty: 1200 }, { m: 9, qty: 1400 }, { m: 10, qty: 1600 }, { m: 11, qty: 1800 }, { m: 12, qty: 2000 }, { m: 24, qty: 5000 }, { m: 36, qty: 10000 }, { m: 48, qty: 20000 }, { m: 60, qty: 50000 }, { m: 72, qty: 250000 }, { m: 84, qty: 1000000 }, { m: 96, qty: 5000000 }] },
-        "GHB": { unit: "cl", note: "100 cl = 1 liter.", steps: [{ m: 0.5, qty: 50 }, { m: 1, qty: 100 }, { m: 2, qty: 150 }, { m: 3, qty: 250 }, { m: 4, qty: 400 }, { m: 5, qty: 600 }, { m: 6, qty: 800 }, { m: 7, qty: 1000 }, { m: 8, qty: 1200 }, { m: 9, qty: 1400 }, { m: 10, qty: 1600 }, { m: 11, qty: 1800 }, { m: 12, qty: 2000 }, { m: 24, qty: 5000 }, { m: 36, qty: 10000 }, { m: 48, qty: 20000 }, { m: 60, qty: 50000 }, { m: 72, qty: 250000 }, { m: 84, qty: 1000000 }, { m: 96, qty: 5000000 }] },
-        "Tramadol": { unit: "g", note: "Avser mängd ren verksam substans.", steps: [{ m: 0.5, qty: 20 }, { m: 1, qty: 40 }, { m: 2, qty: 60 }, { m: 3, qty: 100 }, { m: 4, qty: 160 }, { m: 5, qty: 240 }, { m: 6, qty: 320 }, { m: 7, qty: 400 }, { m: 8, qty: 480 }, { m: 9, qty: 560 }, { m: 10, qty: 640 }, { m: 11, qty: 720 }, { m: 12, qty: 800 }, { m: 24, qty: 2000 }, { m: 36, qty: 4000 }, { m:
+    // Enhet-indexering: [normal, grovt, synn, fines]
+    const drugData = {
+        "Amfetamin": {
+            units: ["g", "g", "kg", "g"], 
+            note: "¹ Gäller även syntetiska katinoner, mefedron och MDPV.",
+            fines: [
+                { db: 30, qty: "0,2" }, { db: 40, qty: "0,4" }, { db: 50, qty: "0,6" }, { db: 60, qty: "0,8" }, 
+                { db: 70, qty: "1,0" }, { db: 80, qty: "1,5" }, { db: 90, qty: "2,0" }, { db: 100, qty: "2,5" }, 
+                { db: 110, qty: "3,0" }, { db: 120, qty: "3,5" }, { db: 130, qty: "4,0" }, { db: 140, qty: "4,5" }, 
+                { db: 150, qty: "5,0" }
+            ],
+            normal: ["5", "10", "15", "25", "40", "60", "80", "100", "120", "140", "160", "180"],
+            grovt: ["200", "500", "1 000", "2 000", "5 000"],
+            synn: ["25", "100", "500"]
+        },
+        "Cannabis": {
+            units: ["g", "kg", "kg", "g"], 
+            note: "För cannabis mäts mängden i rent gram.",
+            fines: [
+                { db: 30, qty: "1" }, { db: 40, qty: "3" }, { db: 50, qty: "5" }, { db: 60, qty: "10" }, 
+                { db: 70, qty: "15" }, { db: 80, qty: "20" }, { db: 90, qty: "25" }, { db: 100, qty: "30" }, 
+                { db: 110, qty: "35" }, { db: 120, qty: "40" }, { db: 130, qty: "45" }, { db: 150, qty: "50" }
+            ],
+            normal: ["50", "100", "150", "250", "400", "600", "800", "1 000", "1 200", "1 400", "1 600", "1 800"],
+            grovt: ["2", "5", "10", "20", "50"],
+            synn: ["250", "1 000", "5 000"]
+        },
+        "Ecstasy": {
+            units: ["st", "st", "st", "st"], 
+            note: "² I domstol jämställs tabletter med 0,1 gram verksam substans med pulver.",
+            fines: [
+                { db: 30, qty: "2" }, { db: 40, qty: "4" }, { db: 50, qty: "6" }, { db: 60, qty: "8" }, 
+                { db: 70, qty: "10" }, { db: 80, qty: "15" }, { db: 90, qty: "20" }, { db: 100, qty: "25" }, 
+                { db: 110, qty: "30" }, { db: 120, qty: "35" }, { db: 130, qty: "40" }, { db: 140, qty: "45" }, 
+                { db: 150, qty: "50" }
+            ],
+            normal: ["50", "100", "150", "250", "400", "600", "800", "1 000", "1 200", "1 400", "1 600", "1 800"],
+            grovt: ["2 000", "5 000", "10 000", "20 000", "50 000"],
+            synn: ["250 000", "1 000 000", "5 000 000"]
+        },
+        "GHB": {
+            units: ["cl", "l", "l", "cl"], 
+            note: "100 cl motsvarar 1 liter.",
+            fines: [
+                { db: 30, qty: "2" }, { db: 40, qty: "4" }, { db: 50, qty: "6" }, { db: 60, qty: "8" }, 
+                { db: 70, qty: "10" }, { db: 80, qty: "15" }, { db: 90, qty: "20" }, { db: 100, qty: "25" }, 
+                { db: 110, qty: "30" }, { db: 120, qty: "35" }, { db: 130, qty: "40" }, { db: 140, qty: "45" }, 
+                { db: 150, qty: "50" }
+            ],
+            normal: ["50", "100", "150", "250", "400", "600", "800", "1 000", "1 200", "1 400", "1 600", "1 800"],
+            grovt: ["20", "50", "100", "200", "500"],
+            synn: ["2 500", "10 000", "50 000"]
+        },
+        "Heroin": {
+            units: ["g", "g", "kg", "g"], 
+            note: "Synnerligen farligt preparat.",
+            fines: [
+                { db: 150, qty: "0,05" }
+            ],
+            normal: ["0,05", "0,1", "0,5", "1", "4", "6", "8", "10", "12", "14", "16", "18"],
+            grovt: ["20", "50", "100", "200", "500"],
+            synn: ["2,5", "10", "50"]
+        },
+        "Kat": {
+            units: ["kg", "kg", "kg", "g"], 
+            note: "För dagsböter anges gränsen i gram, fängelse anges i kilogram.",
+            fines: [
+                { db: 30, qty: "160" }, { db: 40, qty: "320" }, { db: 60, qty: "640" }, { db: 80, qty: "1 200" }, 
+                { db: 100, qty: "2 000" }, { db: 120, qty: "2 800" }, { db: 150, qty: "4 000" }
+            ],
+            normal: ["4", "8", "12", "20", "32", "48", "64", "80", "96", "112", "128", "144"],
+            grovt: ["160", "400", "800", "1 600", "4 000"],
+            synn: ["20 000", "80 000", "400 000"]
+        },
+        "Kokain": {
+            units: ["g", "g", "kg", "g"], 
+            note: "",
+            fines: [
+                { db: 100, qty: "0,2" }, { db: 120, qty: "0,5" }, { db: 150, qty: "0,6" }
+            ],
+            normal: ["0,6", "1", "3", "5", "8", "12", "16", "20", "24", "28", "32", "36"],
+            grovt: ["40", "100", "200", "400", "1 000"],
+            synn: ["5", "20", "100"]
+        },
+        "Opium": {
+            units: ["g", "g", "kg", "g"], 
+            note: "",
+            fines: [
+                { db: 100, qty: "0,1" }, { db: 120, qty: "0,12" }, { db: 150, qty: "0,16" }
+            ],
+            normal: ["0,16", "0,3", "1,5", "3", "12", "18", "24", "30", "36", "42", "48", "54"],
+            grovt: ["60", "150", "300", "600", "1 500"],
+            synn: ["7,5", "30", "150"]
+        },
+        "Rohypnol": {
+            units: ["st", "st", "st", "st"], 
+            note: "³ Gäller även \"andra tabletter\" (ex. bensodiazepiner).",
+            fines: [
+                { db: 30, qty: "10" }, { db: 40, qty: "20" }, { db: 50, qty: "30" }, { db: 60, qty: "40" }, 
+                { db: 70, qty: "50" }, { db: 80, qty: "75" }, { db: 90, qty: "100" }, { db: 100, qty: "125" }, 
+                { db: 110, qty: "150" }, { db: 120, qty: "175" }, { db: 130, qty: "200" }, { db: 140, qty: "225" }, 
+                { db: 150, qty: "250" }
+            ],
+            normal: ["250", "500", "750", "1 250", "2 000", "3 000", "4 000", "5 000", "6 000", "7 000", "8 000", "9 000"],
+            grovt: ["10 000", "25 000", "50 000", "100 000", "250 000"],
+            synn: ["1 250 000", "5 000 000", "25 000 000"]
+        },
+        "Subutex": {
+            units: ["st", "st", "st", "st"], 
+            note: "",
+            fines: [
+                { db: 100, qty: "2" }, { db: 120, qty: "3" }, { db: 150, qty: "4" }
+            ],
+            normal: ["4", "10", "20", "40", "60", "80", "100", "120", "140", "165", "190", "215"],
+            grovt: ["240", "600", "1 200", "2 400", "6 000"],
+            synn: ["30 000", "120 000", "600 000"]
+        },
+        "Svamp": {
+            units: ["g", "kg", "kg", "g"], 
+            note: "Avser svamp innehållande psilocybin eller psilocin.",
+            fines: [
+                { db: 30, qty: "2" }, { db: 50, qty: "20" }, { db: 80, qty: "40" }, { db: 100, qty: "60" }, 
+                { db: 120, qty: "80" }, { db: 150, qty: "100" }
+            ],
+            normal: ["100", "200", "300", "500", "800", "1 200", "1 600", "2 000", "2 400", "2 800", "3 200", "3 600"],
+            grovt: ["4", "10", "20", "40", "100"],
+            synn: ["500", "2 000", "10 000"]
+        },
+        "Tramadol": {
+            units: ["g", "kg", "kg", "g"], 
+            note: "⁴ Vikten avser mängden rent verksam substans.",
+            fines: [
+                { db: 30, qty: "0,4" }, { db: 40, qty: "1,2" }, { db: 50, qty: "2,0" }, { db: 60, qty: "4,0" }, 
+                { db: 70, qty: "6,0" }, { db: 80, qty: "8,0" }, { db: 90, qty: "10,0" }, { db: 100, qty: "12,0" }, 
+                { db: 110, qty: "14,0" }, { db: 120, qty: "16,0" }, { db: 130, qty: "18,0" }, { db: 150, qty: "20,0" }
+            ],
+            normal: ["20", "40", "60", "100", "160", "240", "320", "400", "480", "560", "640", "720"],
+            grovt: ["0,8", "2", "4", "8", "20"],
+            synn: ["100", "400", "2 000"]
+        }
+    };
+
+    const normalMths = ['0,5', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+    const grovtYrs = ['1', '2', '3', '4', '5'];
+    const synnYrs = ['6', '7', '8']; 
+
+    function updateWidget() {
+        const drug = document.getElementById('drug-select').value;
+        const data = drugData[drug];
+
+        // 1. Rendera Ringa (Dagsböter)
+        let finesHtml = '';
+        if (data.fines && data.fines.length > 0) {
+            data.fines.forEach(item => {
+                finesHtml += `<div class="row"><span class="label">${item.db} db</span><span class="value">Högst ${item.qty} ${data.units[3]}</span></div>`;
+            });
+        } else {
+            finesHtml = `<div class="row"><span class="label">Dagsböter</span><span class="value">Ej definierat</span></div>`;
+        }
+        document.getElementById('fines-data').innerHTML = finesHtml;
+
+        // 2. Rendera Normalgrad
+        let normalHtml = '';
+        data.normal.forEach((amount, i) => {
+            normalHtml += `<div class="row"><span class="label">${normalMths[i]} mån</span><span class="value">${amount} ${data.units[0]}</span></div>`;
+        });
+        document.getElementById('normal-data').innerHTML = normalHtml;
+
+        // 3. Rendera Grovt
+        let grovtHtml = '';
+        data.grovt.forEach((amount, i) => {
+            grovtHtml += `<div class="row"><span class="label">${grovtYrs[i]} år</span><span class="value">${amount} ${data.units[1]}</span></div>`;
+        });
+        document.getElementById('grovt-data').innerHTML = grovtHtml;
+
+        // 4. Rendera Synnerligen grovt
+        let synnHtml = '';
+        data.synn.forEach((amount, i) => {
+            synnHtml += `<div class="row"><span class="label">${synnYrs[i]} år</span><span class="value">${amount} ${data.units[2]}</span></div>`;
+        });
+        document.getElementById('synn-data').innerHTML = synnHtml;
+
+        // Fotnot
+        const noteEl = document.getElementById('widget-note');
+        let noteText = data.note ? `<b>OBS:</b> ${data.note}<br><br>` : "";
+        noteText += "Källa: Åklagarmyndighetens RättsPM 2021:21 & Malmö Universitet";
+        noteEl.innerHTML = noteText;
+        
+        // Scroll-reset
+        document.getElementById('results-container').scrollTop = 0;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const select = document.getElementById('drug-select');
+        Object.keys(drugData).forEach(drug => {
+            let opt = document.createElement('option');
+            opt.value = drug;
+            opt.innerHTML = drug;
+            select.appendChild(opt);
+        });
+        updateWidget();
+    });
+</script>
+</body>
+</html>
